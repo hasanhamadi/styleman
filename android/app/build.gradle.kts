@@ -8,7 +8,9 @@ plugins {
 android {
     namespace = "com.example.untitled15"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    
+    // این خط را از حالت flutter.ndkVersion تغییر دهید به مقدار زیر:
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
@@ -20,20 +22,17 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.untitled15"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
-        targetSdk = flutter.targetSdkVersion
+        // اگر در هنگام اجرا با خطای نسخه مواجه شدید، می‌توانید این دو مورد را هم دستی ست کنید:
+        minSdk = 21 
+        targetSdk = 34 // یا نسخه‌ای که در سیستم نصب دارید
+        
         versionCode = flutter.versionCode
         versionName = flutter.versionName
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
             signingConfig = signingConfigs.getByName("debug")
         }
     }

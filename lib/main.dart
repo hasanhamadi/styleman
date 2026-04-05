@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // برای خروج کامل از اپلیکیشن
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -16,51 +14,58 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         useMaterial3: true,
-        scaffoldBackgroundColor: Colors.white, // هماهنگی پس‌زمینه با سایت
+        scaffoldBackgroundColor: Colors.white,
       ),
-      home: const WebViewScreen(),
+      home: const DivarLauncherScreen(),
     );
   }
 }
 
-class WebViewScreen extends StatefulWidget {
-  const WebViewScreen({super.key});
+class DivarLauncherScreen extends StatefulWidget {
+  const DivarLauncherScreen({super.key});
 
   @override
-  State<WebViewScreen> createState() => _WebViewScreenState();
+  State<DivarLauncherScreen> createState() => _DivarLauncherScreenState();
 }
 
-class _WebViewScreenState extends State<WebViewScreen> {
-  late final WebViewController _controller;
-  // آدرس جدید سایت شما
-  final String _targetUrl = 'https://mazoshah.com/';
-
+class _DivarLauncherScreenState extends State<DivarLauncherScreen> {
   @override
   void initState() {
     super.initState();
-    // تنظیمات بهینه برای باز شدن سریع و بدون حاشیه
-    _controller = WebViewController()
-      ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setBackgroundColor(Colors.white)
-      ..loadRequest(Uri.parse(_targetUrl));
+    // فراخوانی خودکار مرورگر داخلی به محض اجرای برنامه
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _launchInAppBrowser();
+    });
+  }
+
+  Future<void> _launchInAppBrowser() async {
+    // آدرس جدید: دیوار
+    final Uri url = Uri.parse('https://divar.ir/');
+
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(
+          url,
+          // باز شدن در حالت In-App Browser (مشابه تجربه کاربری اپلیکیشن‌های حرفه‌ای)
+          mode: LaunchMode.inAppBrowserView,
+          browserConfiguration: const BrowserConfiguration(showTitle: true),
+          webViewConfiguration: const WebViewConfiguration(
+            enableJavaScript: true,
+            enableDomStorage: true,
+          ),
+        );
+      }
+    } catch (e) {
+      debugPrint("خطا در باز کردن سایت دیوار: $e");
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false, // مدیریت دستی دکمه برگشت برای خروج کامل
-      onPopInvokedWithResult: (didPop, result) {
-        if (didPop) return;
-
-        // طبق خواسته شما: با یک کلیک روی برگشت، کلا از برنامه خارج می‌شود
-        SystemNavigator.pop();
-      },
-      child: Scaffold(
-        body: SafeArea(
-          // نمایش مستقیم سایت بدون هیچ المان اضافه (لودینگ یا خطا)
-          child: WebViewWidget(controller: _controller),
-        ),
-      ),
+    // صفحه کاملاً سفید بدون لودینگ (مشابه درخواست قبلی شما)
+    return const Scaffold(
+      backgroundColor: Colors.white,
+      body: SizedBox.expand(),
     );
   }
 }
