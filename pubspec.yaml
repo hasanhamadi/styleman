@@ -22,13 +22,13 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/app_icon.jpg"
+  image_path: "assets/appi_icon.jpg"
   adaptive_icon_background: "#ffffff"
-  adaptive_icon_foreground: "assets/app_icon.jpg"
+  adaptive_icon_foreground: "assets/appi_icon.jpg"
 
 flutter:
   uses-material-design: true
 
   # معرفی فایل عکس به فلاتر
   assets:
-    - assets/app_icon.jpg
+    - assets/appi_icon.jpg
