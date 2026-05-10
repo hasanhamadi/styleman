@@ -40,7 +40,7 @@ class _DivarLauncherScreenState extends State<DivarLauncherScreen> {
 
   Future<void> _launchInAppBrowser() async {
     // آدرس جدید: دیوار
-    final Uri url = Uri.parse('https://divar.ir/');
+    final Uri url = Uri.parse('https://stylemanshop.com/');
 
     try {
       if (await canLaunchUrl(url)) {
